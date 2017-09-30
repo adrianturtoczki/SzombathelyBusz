@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+        <head>
+            <title>Busz</title>
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+        </head>
+        <body>
+            <div class="container">
+            <h1>Szombathelyi buszjáratok</h1>
+            <form action="hours" method="GET">
+                <label>Járat: </label>
+                <select id="line" name="line">
+                    {% for i in all_lines %}
+                    <option value="{{ i.lines }}">{{i.lines}}</option>
+                    {%endfor%}
+                    </select>
+                <label>Buszmegállók: </label>
+                <select id="stop" name="stop">
+                    {% for i in stops %}
+                    <option value="{{ i.stops }}">{{i.stops}}</option>
+                    {%endfor%}
+                </select>
+                <button type="submit">Submit</button>
+            </form>

@@ -99,3 +99,10 @@ ENV/
 
 # mypy
 .mypy_cache/
+SzBusz/SzBusz/SETTINGS_KEYS.py
+SzBusz/SQLiteDatabaseBrowserPortable.exe - Shortcut.lnk
+SzBusz/SETTINGS_KEYS.py
+SETTINGS_KEYS.py
+SETTINGS
+scraping_results.txt
+SzBusz.db

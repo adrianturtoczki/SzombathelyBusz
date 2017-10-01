@@ -23,22 +23,25 @@ def get_lines():
         stops.append([name,lines])
 
 def get_all_lines():
+    get_lines()
     line_unfiltered = list(map(lambda x:x[1],stops))
     for li_ar in line_unfiltered:
         for line in li_ar:
             if not line in all_lines:
                 all_lines.append(line)
+    return all_lines
 
 def line_pages():
     page_stops = []
-    time_ar = []
-    i = str(6)
-    
-    line_page = requests.get("http://www.enykk.hu/aktiv_tartalom/menetrendes/web.cgi?func=linett&lang=hu&city=sz&line="+i+"&dir=1&spos=0")
-    soup = bs(line_page.content, 'html.parser')
+    #line_name = "6"
+    get_all_lines()
+    for line_name in all_lines:
+        print(line_name)
+        line_page = requests.get("http://www.enykk.hu/aktiv_tartalom/menetrendes/web.cgi?func=linett&lang=hu&city=sz&line="+line_name+"&dir=1&spos=0")
+        soup = bs(line_page.content, 'html.parser')
 
-    page_stops = stops_and_mins(soup)
-    line_times(time_ar,soup,page_stops)
+        page_stops = stops_and_mins(soup)
+        line_times(soup,page_stops,line_name)
 
 def get_cord(link):
     try:
@@ -64,17 +67,25 @@ def stops_and_mins(soup):
     except Exception as e:
         print(e)
     return page_stops
-def line_times(time_ar,soup,page_stops):
+def line_times(soup,page_stops,line_name):
     tan_times = soup.find_all("td", class_="dtI") #tanítási napok
-    for i in tan_times:
-        i = i.get_text().replace("\n","").replace(u"\xa0",u"")
-        print(i)
-        if i[-4:] == "0030":
-            time_ar.append(i[:-2])
-            time_ar.append(i[:3]+i[-2:])
-        else:
-            time_ar.append(i)
-    line_with_hours.append(["6",time_ar[1:],page_stops])
+    notan_m_times = soup.find_all("td", class_="dtWM") #tanszünetes munkanapok
+    szom_times = soup.find_all("td", class_="dtSZN") #szabadnap(szombat)
+    vas_times = soup.find_all("td", class_="dtMSZ") #vasárnap és ünnepnap
+    all_times = [tan_times,notan_m_times,szom_times,vas_times]
+    all_time_names = ["dtI","dtWM","dtSZN","dtMSZ"]
+    for tim in all_times:
+        time_ar = []
+        for i in tim:
+            i = i.get_text().replace("\n","").replace(u"\xa0",u"")
+            #print(i)
+            if i[-4:] == "0030":
+                time_ar.append(i[:-2])
+                time_ar.append(i[:3]+i[-2:])
+            else:
+                time_ar.append(i)
+        d_type = all_time_names[all_times.index(tim)]
+        line_with_hours.append([line_name,time_ar[1:],page_stops,d_type])
 line_pages()
 #print(line_with_hours)
 

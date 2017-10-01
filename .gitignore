@@ -106,3 +106,5 @@ SETTINGS_KEYS.py
 SETTINGS
 scraping_results.txt
 SzBusz.db
+scraping_results - odaut.txt
+SzBusz/SzBusz2.db

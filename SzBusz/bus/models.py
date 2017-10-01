@@ -19,6 +19,7 @@ class Timetable(models.Model):
     lines = models.TextField(db_column='Lines', blank=True, null=True)  
     hours = models.TextField(db_column='Hours', blank=True, null=True)
     d_type = models.TextField(db_column='d_type', blank=True, null=True)
+    direction = models.IntegerField(db_column='direction', blank=True, null=True)
 
     class Meta:
         managed = False

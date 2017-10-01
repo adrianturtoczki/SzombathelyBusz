@@ -61,7 +61,7 @@ c = db.cursor()
 c.execute('DROP TABLE IF EXISTS main;')
 c.execute("CREATE TABLE main(id INTEGER PRIMARY KEY, Lines TEXT, Stops INTEGER, Time TEXT, Coordinates TEXT);")
 c.execute('DROP TABLE IF EXISTS timetable;')
-c.execute("CREATE TABLE timetable(id INTEGER PRIMARY KEY, Lines TEXT, Hours TEXT, d_type TEXT);")
+c.execute("CREATE TABLE timetable(id INTEGER PRIMARY KEY, Lines TEXT, Hours TEXT, d_type TEXT, direction INTEGER);")
 
 def main_setup():
     for i in range(len(stops_and_time)):
@@ -77,11 +77,12 @@ def timetable_setup():
         d_type = imported[i][3]
         hours = imported[i][1]
         cur_line = imported[i][0]
+        direction = imported[i][4]
         #print(hours)
         for j in range(len(hours)):
             tim_id+=1
             #print(hours[0][j])
-            c.execute("INSERT INTO timetable(id,Lines,Hours,d_type) VALUES(%d,'%s','%s','%s');"%(tim_id,cur_line,hours[j],d_type))
+            c.execute("INSERT INTO timetable(id,Lines,Hours,d_type,direction) VALUES(%d,'%s','%s','%s',%d);"%(tim_id,cur_line,hours[j],d_type,direction))
 for i in range(len(imported)):
     print(i)
 timetable_setup()

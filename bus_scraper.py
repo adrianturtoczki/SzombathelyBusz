@@ -35,13 +35,13 @@ def line_pages():
     page_stops = []
     #line_name = "6"
     get_all_lines()
-    for line_name in all_lines:
-        print(line_name)
-        line_page = requests.get("http://www.enykk.hu/aktiv_tartalom/menetrendes/web.cgi?func=linett&lang=hu&city=sz&line="+line_name+"&dir=1&spos=0")
-        soup = bs(line_page.content, 'html.parser')
-
-        page_stops = stops_and_mins(soup)
-        line_times(soup,page_stops,line_name)
+    for direction in [1,2]:
+        for line_name in all_lines[:1]: # line 1
+            print(line_name)
+            line_page = requests.get("http://www.enykk.hu/aktiv_tartalom/menetrendes/web.cgi?func=linett&lang=hu&city=sz&line="+line_name+"&dir="+str(direction)+"&spos=0")
+            soup = bs(line_page.content, 'html.parser')
+            page_stops = stops_and_mins(soup)
+            line_times(soup,page_stops,line_name,direction)
 
 def get_cord(link):
     try:
@@ -67,7 +67,7 @@ def stops_and_mins(soup):
     except Exception as e:
         print(e)
     return page_stops
-def line_times(soup,page_stops,line_name):
+def line_times(soup,page_stops,line_name,direction):
     tan_times = soup.find_all("td", class_="dtI") #tanítási napok
     notan_m_times = soup.find_all("td", class_="dtWM") #tanszünetes munkanapok
     szom_times = soup.find_all("td", class_="dtSZN") #szabadnap(szombat)
@@ -85,7 +85,7 @@ def line_times(soup,page_stops,line_name):
             else:
                 time_ar.append(i)
         d_type = all_time_names[all_times.index(tim)]
-        line_with_hours.append([line_name,time_ar[1:],page_stops,d_type])
+        line_with_hours.append([line_name,time_ar[1:],page_stops,d_type,direction])
 line_pages()
 #print(line_with_hours)
 

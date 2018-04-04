@@ -78,5 +78,7 @@ def line_times(time_ar,soup,page_stops):
 line_pages()
 #print(line_with_hours)
 
-with open("scraping_results.txt","w") as f:
-    f.write(str(line_with_hours))
+with open("scraping_results.txt","w",encoding='utf-8') as f:
+    print(str(line_with_hours))
+    final_text = str(line_with_hours)
+    f.write(final_text)
